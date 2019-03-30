@@ -17,11 +17,13 @@ public:
     void emiter_DataAccel();
     void emiter_DataGyro();
     void emiter_DataGPS();
+    void emiter_Attitude();
 
 signals:
     void send_DataAccel(float ax, float ay, float az);
     void send_DataGyro(float gx, float gy, float gz);
     void send_DataGPS(double lon, double lan);
+    void send_DataAttitude(float roll, float pitch, float yaw);
     void send_DataAltitude(float alt);
     void send_DataCamera();
 
@@ -40,6 +42,9 @@ private:
     uint m_gzTag;
     uint m_lonTag;
     uint m_latTag;
+    uint m_rollTag;
+    uint m_pitchTag;
+    uint m_yawTag;
     QByteArray m_data;
     uint8_t m_teamId[3];
     uint8_t m_msgId;

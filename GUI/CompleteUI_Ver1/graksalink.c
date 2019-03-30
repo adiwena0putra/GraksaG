@@ -199,6 +199,72 @@ void construct_MSG_LAT(uint8_t **output, uint8_t SOF, uint8_t Team_ID[3], double
     }
 }
 
+void construct_MSG_ROLL(uint8_t **output, uint8_t SOF, uint8_t Team_ID[3], float roll)
+{
+    uint8_t *p_byte = (uint8_t*) &roll;
+    size_t nBytes = sizeof (char)*5 + sizeof (roll);
+    uint8_t *temp;
+    *output = NULL;
+    *output = (uint8_t*) malloc(nBytes);
+    temp = *output;
+
+    for (size_t i=0; i<nBytes; i++){
+        if (i==0) {
+            temp[i]=SOF;
+        } else if (i>=1 && i<=3 ){
+            temp[i]=Team_ID[i-1];
+        } else if (i==4) {
+            temp[i]=GRAKSA_MSG_ID_ROLL;
+        } else {
+            temp[i]=p_byte[i-5];
+        }
+    }
+}
+
+void construct_MSG_PITCH(uint8_t **output, uint8_t SOF, uint8_t Team_ID[3], float pitch)
+{
+    uint8_t *p_byte = (uint8_t*) &pitch;
+    size_t nBytes = sizeof (char)*5 + sizeof (pitch);
+    uint8_t *temp;
+    *output = NULL;
+    *output = (uint8_t*) malloc(nBytes);
+    temp = *output;
+
+    for (size_t i=0; i<nBytes; i++){
+        if (i==0) {
+            temp[i]=SOF;
+        } else if (i>=1 && i<=3 ){
+            temp[i]=Team_ID[i-1];
+        } else if (i==4) {
+            temp[i]=GRAKSA_MSG_ID_PITCH;
+        } else {
+            temp[i]=p_byte[i-5];
+        }
+    }
+}
+
+void construct_MSG_YAW(uint8_t **output, uint8_t SOF, uint8_t Team_ID[3], float yaw)
+{
+    uint8_t *p_byte = (uint8_t*) &yaw;
+    size_t nBytes = sizeof (char)*5 + sizeof (yaw);
+    uint8_t *temp;
+    *output = NULL;
+    *output = (uint8_t*) malloc(nBytes);
+    temp = *output;
+
+    for (size_t i=0; i<nBytes; i++){
+        if (i==0) {
+            temp[i]=SOF;
+        } else if (i>=1 && i<=3 ){
+            temp[i]=Team_ID[i-1];
+        } else if (i==4) {
+            temp[i]=GRAKSA_MSG_ID_YAW;
+        } else {
+            temp[i]=p_byte[i-5];
+        }
+    }
+}
+
 ///* Deconstruct Message */
 //void deconstruct_MSG_AX(message_t *input, float *ax)
 //{

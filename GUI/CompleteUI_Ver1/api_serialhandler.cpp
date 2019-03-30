@@ -146,8 +146,8 @@ void API_SerialHandler::update_List()
 
 void API_SerialHandler::read_DataBytes()
 {
-    if (m_serial.bytesAvailable()>=BYTES_PER_READ /*&& m_isDataAcq*/) {
-        m_data = m_serial.read(BYTES_PER_READ);
+    if (m_serial.bytesAvailable()) {
+        m_data = m_serial.readAll();
 //        qDebug()<<m_data;
         if (m_isDataAcq){
             emit send_DataByte(m_data);

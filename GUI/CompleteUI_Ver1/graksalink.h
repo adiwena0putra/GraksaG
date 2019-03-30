@@ -28,9 +28,9 @@
 #define GRAKSA_MSG_ID_XPOS 10
 #define GRAKSA_MSG_ID_YPOS 11
 #define GRAKSA_MSG_ID_ZPOS 12
-#define GRAKSA_MSG_ID_ROLL 13
-#define GRAKSA_MSG_ID_PITCH 14
-#define GRAKSA_MSG_ID_YAW 15
+#define GRAKSA_MSG_ID_ROLL 14
+#define GRAKSA_MSG_ID_PITCH 15
+#define GRAKSA_MSG_ID_YAW 16
 
 /* Construct Message */
 void construct_MSG_AX(uint8_t **output, uint8_t SOF, uint8_t Team_ID[3], float ax);
@@ -42,6 +42,9 @@ void construct_MSG_GZ(uint8_t **output, uint8_t SOF, uint8_t Team_ID[3], float g
 void construct_MSG_ALT(uint8_t **output, uint8_t SOF, uint8_t Team_ID[3], float alt);
 void construct_MSG_LON(uint8_t **output, uint8_t SOF, uint8_t Team_ID[3], double lon);
 void construct_MSG_LAT(uint8_t **output, uint8_t SOF, uint8_t Team_ID[3], double lat);
+void construct_MSG_ROLL(uint8_t **output, uint8_t SOF, uint8_t Team_ID[3], float roll);
+void construct_MSG_PITCH(uint8_t **output, uint8_t SOF, uint8_t Team_ID[3], float pitch);
+void construct_MSG_YAW(uint8_t **output, uint8_t SOF, uint8_t Team_ID[3], float yaw);
 
 
 #endif // GRAKSALINK_H

@@ -48,13 +48,13 @@ Entity{
         components: [payload_mesh, payload_material, payload_transform]
     }
 
-//    Connections{
-//        target: obj_Model3D
-//        onUpdate_UI: {
-//            payload_transform.rotationX = pitch;
-//            payload_transform.rotationY = yaw;
-//            payload_transform.rotationZ = roll;
-//        }
-//    }
+    Connections{
+        target: obj_ModelAttitude
+        onUpdate_UI: {
+            payload_transform.rotationX = pitch;
+            payload_transform.rotationY = yaw;
+            payload_transform.rotationZ = roll;
+        }
+    }
 
 }
