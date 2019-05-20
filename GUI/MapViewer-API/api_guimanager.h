@@ -19,7 +19,7 @@ signals:
     void update_UISpline2(float ax, float ay, float az);
     void update_UISpline3(float gx, float gy, float gz);
     void update_UILogF(int id, float data);
-//    void update_UILogD(int id, double data);
+    void update_UILogD(int id, float data);
     void update_UIMap(float lon, float lat);
     void update_UIModel3D(float roll, float pitch, float yaw);
     void update_UIApogee(float apogee);
@@ -32,8 +32,8 @@ signals:
 public slots:
     void update_UIAll();
     void receive_Attitude(float roll, float pitch, float yaw);
-    //void receive_Altitude(float alt);
-    void receive_Coordinate(float lon, float lat, float alt);
+    void receive_Altitude(float alt);
+    void receive_Coordinate(float lon, float lat);
     void receive_Odometry(float xpos, float ypos, float zpos);
     void receive_DataAccel(float ax, float ay, float az);
     void receive_DataGyro(float gx, float gy, float gz);

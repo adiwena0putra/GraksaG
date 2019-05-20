@@ -120,11 +120,11 @@ Item {
             Connections{
                 target: obj_MapViewer
                 onUpdate_UI: {
-                    id_map.center = QtPositioning.coordinate(longitude,latitude)
+                    id_map.center = QtPositioning.coordinate(latitude,longitude)
 
                     if (isHome) {
                         id_map.start_tracing = true
-                        home.coordinate = QtPositioning.coordinate(longitude,latitude)
+                        home.coordinate = QtPositioning.coordinate(latitude,longitude)
                         id_map.add_line = true
                     }
 
@@ -138,7 +138,7 @@ Item {
                             }
                         }
 
-                        tracer.addCoordinate(QtPositioning.coordinate(longitude,latitude))
+                        tracer.addCoordinate(QtPositioning.coordinate(latitude,longitude))
                     }
 
                     label_infolon.text = qsTr("%1").arg(longitude)

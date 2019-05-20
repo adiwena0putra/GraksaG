@@ -22,9 +22,9 @@ public:
 signals:
     void send_DataAccel(float ax, float ay, float az);
     void send_DataGyro(float gx, float gy, float gz);
-    void send_DataGPS(float lon, float lan, float alt);
+    void send_DataGPS(float lon, float lan);
     void send_DataAttitude(float roll, float pitch, float yaw);
-//    void send_DataAltitude(float alt);
+    void send_DataAltitude(float alt);
     void send_DataCamera();
 
 public slots:
@@ -42,7 +42,6 @@ private:
     uint m_gzTag;
     uint m_lonTag;
     uint m_latTag;
-    uint m_altTag;
     uint m_rollTag;
     uint m_pitchTag;
     uint m_yawTag;
@@ -55,6 +54,7 @@ private:
     QQueue<float> m_gx;
     QQueue<float> m_gy;
     QQueue<float> m_gz;
+    QQueue<float> m_alt;
     QQueue<float> m_xpos;
     QQueue<float> m_ypos;
     QQueue<float> m_zpos;
@@ -63,7 +63,6 @@ private:
     QQueue<float> m_yaw;
     QQueue<float> m_lon;
     QQueue<float> m_lat;
-    QQueue<float> m_alt;
 };
 
 #endif // API_PROTOCOLHANDLER_H

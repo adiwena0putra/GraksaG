@@ -27,7 +27,7 @@ void API_MapViewer::set_clear()
 }
 
 // SLOT
-void API_MapViewer::receive_Data3DPosition(coordinate_t longitude, coordinate_t latitude)
+void API_MapViewer::receive_Data3DPosition(float longitude, float latitude)
 {
     emit update_UI(longitude, latitude, m_isHome);
     if (m_isHome) {

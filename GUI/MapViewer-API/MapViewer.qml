@@ -78,8 +78,8 @@ Item {
                 id: id_map
                 anchors.fill: parent
                 plugin: mapPlugin
-                property double lon: 0
-                property double lat: 0
+                property double lon: 107.571;
+                property double lat: -6.88785;
                 property bool start_tracing : false
                 property bool add_line: false
                 center: QtPositioning.coordinate(lon, lat)
@@ -120,11 +120,11 @@ Item {
             Connections{
                 target: obj_MapViewer
                 onUpdate_UI: {
-                    id_map.center = QtPositioning.coordinate(longitude,latitude)
+                    id_map.center = QtPositioning.coordinate(latitude,longitude)
 
                     if (isHome) {
                         id_map.start_tracing = true
-                        home.coordinate = QtPositioning.coordinate(longitude,latitude)
+                        home.coordinate = QtPositioning.coordinate(latitude,longitude)
                         id_map.add_line = true
                     }
 
@@ -138,7 +138,7 @@ Item {
                             }
                         }
 
-                        tracer.addCoordinate(QtPositioning.coordinate(longitude,latitude))
+                        tracer.addCoordinate(QtPositioning.coordinate(latitude,longitude))
                     }
 
                     label_infolon.text = qsTr("%1").arg(longitude)

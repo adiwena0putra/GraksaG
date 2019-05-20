@@ -1,4 +1,4 @@
-QT += quick location positioning
+QT += quick widgets quickcontrols2 datavisualization gui qml core charts serialport
 
 CONFIG += c++11
 
@@ -15,8 +15,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    api_mapviewer.cpp \
-    tester_mapviewer.cpp
+    tester_mapviewer.cpp \
+    api_guimanager.cpp \
+    api_protocolhandler.cpp \
+    api_serialhandler.cpp \
+    graksalink.c \
+    api_mapviewer.cpp
 
 RESOURCES += qml.qrc
 
@@ -32,6 +36,13 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    api_mapviewer.h \
     tester_mapviewer.h \
-    type_definition.h
+    type_definition.h \
+    api_guimanager.h \
+    api_protocolhandler.h \
+    api_serialhandler.h \
+    graksalink.h \
+    define_gui.h \
+    api_mapviewer.h
+
+DISTFILES +=

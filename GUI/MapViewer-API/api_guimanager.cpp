@@ -36,14 +36,14 @@ void API_GUIManager::receive_DataGyro(float gx, float gy, float gz)
     m_gz.enqueue(gz);
 }
 
-//void API_GUIManager::receive_Altitude(float alt)
-//{
-//    m_alt.enqueue(alt);
-//}
+void API_GUIManager::receive_Altitude(float alt)
+{
+    m_alt.enqueue(alt);
+}
 
 void API_GUIManager::receive_Attitude(float roll, float pitch, float yaw)
 {
-    //qDebug()<<"shit";
+    qDebug()<<"shit";
     m_roll.enqueue(roll);
     m_pitch.enqueue(pitch);
     m_yaw.enqueue(yaw);
@@ -56,14 +56,10 @@ void API_GUIManager::receive_Odometry(float xpos, float ypos, float zpos)
     m_zpos.enqueue(zpos);
 }
 
-void API_GUIManager::receive_Coordinate(float lon, float lat, float alt)
+void API_GUIManager::receive_Coordinate(float lon, float lat)
 {
     m_lon.enqueue(lon);
     m_lat.enqueue(lat);
-    m_alt.enqueue(alt);
-    m_xpos.enqueue(lon);
-    m_ypos.enqueue(lat);
-    m_zpos.enqueue(alt);
 }
 
 void API_GUIManager::update_UIAll()
@@ -142,8 +138,8 @@ void API_GUIManager::update_UIAll()
     // MAP
     if ((static_cast<int>(temp_lon) != EMPTY_NUMBER)
             && (static_cast<int>(temp_lat) != EMPTY_NUMBER)){
-        emit update_UILogF(LON_LOG_ID, temp_lon);
-        emit update_UILogF(LAT_LOG_ID, temp_lat);
+        emit update_UILogD(LON_LOG_ID, temp_lon);
+        emit update_UILogD(LAT_LOG_ID, temp_lat);
         emit update_UIMap(temp_lon, temp_lat);
     }
     // Scatter

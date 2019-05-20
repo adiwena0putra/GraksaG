@@ -11,7 +11,6 @@ API_ProtocolHandler::API_ProtocolHandler(QObject *parent) : QObject(parent)
     m_gzTag = 0;
     m_lonTag = 0;
     m_latTag = 0;
-    m_altTag = 0;
     m_teamId[0]='I';
     m_teamId[1]='T';
     m_teamId[2]='B';
@@ -50,22 +49,21 @@ void API_ProtocolHandler::emiter_DataGyro()
 
 void API_ProtocolHandler::emiter_DataGPS()
 {
-    if ((m_lonTag == m_latTag)&&(m_lonTag == m_altTag)&&(m_altTag == m_latTag)) {
-        emit send_DataGPS(m_lon.dequeue(),m_lat.dequeue(),m_alt.dequeue());
+    if (m_lonTag == m_latTag) {
+        qDebug()<<"send_datagps";
+        emit send_DataGPS(m_lon.dequeue(),m_lat.dequeue());
     } else {
         m_lonTag = 0;
         m_latTag = 0;
-        m_altTag = 0;
         m_lon.clear();
         m_lat.clear();
-        m_alt.clear();
     }
 }
 
 void API_ProtocolHandler::emiter_Attitude()
 {
     if ((m_rollTag == m_pitchTag)&&(m_rollTag == m_yawTag)&&(m_pitchTag == m_yawTag)){
-        //qDebug()<<"yeah";
+        qDebug()<<"yeah";
         emit send_DataAttitude(m_roll.dequeue(),m_pitch.dequeue(),m_yaw.dequeue());
     } else {
         m_rollTag = 0;
@@ -79,6 +77,7 @@ void API_ProtocolHandler::emiter_Attitude()
 
 void API_ProtocolHandler::receive_DataByte(QByteArray data)
 {
+    qDebug()<<"test1";
     bool startNewFrame = false;
     for (int i=0; i<data.size() ;i++) {
         if (static_cast<uint8_t>(data[i]) == 0xd) {
@@ -125,10 +124,17 @@ void API_ProtocolHandler::receive_DataByte(QByteArray data)
                     break;
                 }
             case 4:
+                qDebug()<<"test2";
                 if ((m_msgId = static_cast<uint8_t>(data[i])) <= 16) {
-                    m_maxCounter = m_byteCounter + 4; // float
-                    m_data.append(data[i]);
-                    m_byteCounter++;
+                    if (m_msgId == GRAKSA_MSG_ID_LAT || m_msgId == GRAKSA_MSG_ID_LON) {
+                        m_maxCounter = m_byteCounter + 4; // double
+                        m_data.append(data[i]);
+                        m_byteCounter++;
+                    } else {
+                        m_maxCounter = m_byteCounter + 4; // float
+                        m_data.append(data[i]);
+                        m_byteCounter++;
+                    }
                     break;
                 } else {
                     m_byteCounter = 0;
@@ -142,65 +148,65 @@ void API_ProtocolHandler::receive_DataByte(QByteArray data)
                     break;
                 } else {
                     if (m_byteCounter == m_maxCounter+1) {
-                        float container;
+                        float container_float;
+                        float container_double;
                         char*p_payload;
                         p_payload = m_data.data();
                         switch (m_msgId) {
                         case GRAKSA_MSG_ID_AX:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            //qDebug()<<"AX: "<<container;
-                            m_ax.enqueue(container);
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            //qDebug()<<"AX: "<<container_float;
+                            m_ax.enqueue(container_float);
                             m_axTag += 1;
                             break;
                         case GRAKSA_MSG_ID_AY:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            //qDebug()<<"AY: "<<container;
-                            m_ay.enqueue(container);
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            //qDebug()<<"AY: "<<container_float;
+                            m_ay.enqueue(container_float);
                             m_ayTag += 1;
                             break;
                         case GRAKSA_MSG_ID_AZ:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            //qDebug()<<"AZ: "<<container;
-                            m_az.enqueue(container);
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            //qDebug()<<"AZ: "<<container_float;
+                            m_az.enqueue(container_float);
                             m_azTag += 1;
                             emiter_DataAccel();
                             break;
                         case GRAKSA_MSG_ID_GX:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            //qDebug()<<"GX: "<<container;
-                            m_gx.enqueue(container);
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            //qDebug()<<"GX: "<<container_float;
+                            m_gx.enqueue(container_float);
                             m_gxTag += 1;
                             break;
                         case GRAKSA_MSG_ID_GY:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            //qDebug()<<"GY: "<<container;
-                            m_gy.enqueue(container);
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            //qDebug()<<"GY: "<<container_float;
+                            m_gy.enqueue(container_float);
                             m_gyTag += 1;
                             break;
                         case GRAKSA_MSG_ID_GZ:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            //qDebug()<<"GZ: "<<container;
-                            m_gz.enqueue(container);
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            //qDebug()<<"GZ: "<<container_float;
+                            m_gz.enqueue(container_float);
                             m_gzTag += 1;
                             emiter_DataGyro();
                             break;
                         case GRAKSA_MSG_ID_ALT:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            //qDebug()<<"ALT: "<<container;
-                            m_alt.enqueue(container);
-                            m_altTag += 1;
-                            //emit send_DataAltitude(m_alt.dequeue());
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            //qDebug()<<"ALT: "<<container_float;
+                            m_alt.enqueue(container_float);
+                            emit send_DataAltitude(m_alt.dequeue());
                             break;
                         case GRAKSA_MSG_ID_LON:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            //qDebug()<<"LON: "<<container;
-                            m_lon.enqueue(container);
+                            memcpy(&container_double, &(p_payload[5]), sizeof (float));
+                            qDebug()<<"LON: "<<container_double;
+                            m_lon.enqueue(container_double);
                             m_lonTag += 1;
                             break;
                         case GRAKSA_MSG_ID_LAT:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            //qDebug()<<"LAT: "<<container;
-                            m_lat.enqueue(container);
+                            memcpy(&container_double, &(p_payload[5]), sizeof (float));
+                            qDebug()<<"LAT: "<<container_double;
+                            m_lat.enqueue(container_double);
                             m_latTag += 1;
                             emiter_DataGPS();
                             break;
@@ -208,33 +214,33 @@ void API_ProtocolHandler::receive_DataByte(QByteArray data)
                             // masih gatau
                             break;
                         case GRAKSA_MSG_ID_XPOS:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            m_xpos.enqueue(container);
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            m_xpos.enqueue(container_float);
                             break;
                         case GRAKSA_MSG_ID_YPOS:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            m_ypos.enqueue(container);
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            m_ypos.enqueue(container_float);
                             break;
                         case GRAKSA_MSG_ID_ZPOS:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            m_zpos.enqueue(container);
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            m_zpos.enqueue(container_float);
                             break;
                         case GRAKSA_MSG_ID_ROLL:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            qDebug()<<"ROLL: "<<container;
-                            m_roll.enqueue(container);
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            qDebug()<<"ROLL: "<<container_float;
+                            m_roll.enqueue(container_float);
                             m_rollTag += 1;
                             break;
                         case GRAKSA_MSG_ID_PITCH:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            qDebug()<<"PITCH: "<<container;
-                            m_pitch.enqueue(container);
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            qDebug()<<"PITCH: "<<container_float;
+                            m_pitch.enqueue(container_float);
                             m_pitchTag += 1;
                             break;
                         case GRAKSA_MSG_ID_YAW:
-                            memcpy(&container, &(p_payload[5]), sizeof (float));
-                            qDebug()<<"YAW: "<<container;
-                            m_yaw.enqueue(container);
+                            memcpy(&container_float, &(p_payload[5]), sizeof (float));
+                            qDebug()<<"YAW: "<<container_float;
+                            m_yaw.enqueue(container_float);
                             m_yawTag += 1;
                             emiter_Attitude();
                             break;

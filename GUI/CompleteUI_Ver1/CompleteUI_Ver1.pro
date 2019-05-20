@@ -27,7 +27,9 @@ SOURCES += \
     api_storagehandler.cpp \
     api_mapviewer.cpp \
     api_scatter3d.cpp \
-    api_chartviewer.cpp
+    api_chartviewer.cpp \
+    graksastring.cpp \
+    api_graksastringparser.cpp
 
 RESOURCES += qml.qrc
 
@@ -55,4 +57,6 @@ HEADERS += \
     api_storagehandler.h \
     api_mapviewer.h \
     api_scatter3d.h \
-    api_chartviewer.h
+    api_chartviewer.h \
+    graksastring.h \
+    api_graksastringparser.h

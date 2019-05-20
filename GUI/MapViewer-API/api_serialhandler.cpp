@@ -1,10 +1,10 @@
 #include "api_serialhandler.h"
-//#include <QtDebug>
+#include <QtDebug>
 
 API_SerialHandler::API_SerialHandler(QObject *parent) : QObject(parent)
 {
     m_isActive = false;
-    m_isDataAcq = false;
+    m_isDataAcq = true;
     connect(this,&API_SerialHandler::changed_List,this,&API_SerialHandler::update_List);
     connect(&m_serial,&QSerialPort::readyRead,this,&API_SerialHandler::read_DataBytes);
 //    connect(this,SIGNAL(changed_List()),this,SLOT(update_List()));
@@ -148,7 +148,7 @@ void API_SerialHandler::read_DataBytes()
 {
     if (m_serial.bytesAvailable()) {
         m_data = m_serial.readAll();
-//        qDebug()<<m_data;
+        //qDebug()<<m_data;
         if (m_isDataAcq){
             emit send_DataByte(m_data);
             m_data.clear();

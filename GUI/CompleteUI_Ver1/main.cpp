@@ -14,6 +14,7 @@
 #include "api_scatter3d.h"
 #include "api_chartviewer.h"
 #include "api_modelattitude.h"
+//#include "api_graksastringparser.h"
 
 int main(int argc, char *argv[])
 {
@@ -29,6 +30,7 @@ int main(int argc, char *argv[])
     API_Terminal obj_LogData;
     API_SerialHandler obj_SerialHandler;
     API_ProtocolHandler obj_ProtocolHandler;
+//    API_GraksaStringParser obj_GraksaStringParser;
     API_DataLogHandler obj_DataLogHandler;
     API_GUIManager obj_GUIManager;
     API_StorageHandler obj_StorageHandler;
@@ -61,14 +63,20 @@ int main(int argc, char *argv[])
 
     // koneksi SerialHandler ke ProtocolHandler untuk kirim byte
     QObject::connect(&obj_SerialHandler,&API_SerialHandler::send_DataByte,&obj_ProtocolHandler,&API_ProtocolHandler::receive_DataByte);
+//    QObject::connect(&obj_SerialHandler,&API_SerialHandler::send_DataByte,&obj_GraksaStringParser,&API_GraksaStringParser::receive_DataByte);
 
     // koneksi ProtocolHandler ke GUIManager untuk data accel dan gyro
     QObject::connect(&obj_ProtocolHandler, &API_ProtocolHandler::send_DataAccel,&obj_GUIManager,&API_GUIManager::receive_DataAccel);
     QObject::connect(&obj_ProtocolHandler, &API_ProtocolHandler::send_DataGyro,&obj_GUIManager,&API_GUIManager::receive_DataGyro);
+    QObject::connect(&obj_ProtocolHandler, &API_ProtocolHandler::send_DataAttitude,&obj_GUIManager,&API_GUIManager::receive_Attitude);
+    QObject::connect(&obj_ProtocolHandler, &API_ProtocolHandler::send_DataGPS,&obj_GUIManager,&API_GUIManager::receive_Coordinate);
+
+//    QObject::connect(&obj_GraksaStringParser, &API_GraksaStringParser::send_DataAccel,&obj_GUIManager,&API_GUIManager::receive_DataAccel);
+//    QObject::connect(&obj_GraksaStringParser, &API_GraksaStringParser::send_DataGyro,&obj_GUIManager,&API_GUIManager::receive_DataGyro);
 
     // koneksi GUIManager ke datalog handler untuk data float dan double
     QObject::connect(&obj_GUIManager, &API_GUIManager::update_UILogF, &obj_DataLogHandler,&API_DataLogHandler::receive_DataLogF);
-    QObject::connect(&obj_GUIManager, &API_GUIManager::update_UILogD, &obj_DataLogHandler,&API_DataLogHandler::receive_DataLogD);
+//    QObject::connect(&obj_GUIManager, &API_GUIManager::update_UILogD, &obj_DataLogHandler,&API_DataLogHandler::receive_DataLogD);
 
     // koneksi GUIManager ke storage hanler untuk ngasih data
     QObject::connect(&obj_GUIManager, &API_GUIManager::update_Storage, &obj_StorageHandler,&API_StorageHandler::write_Data);
@@ -90,6 +98,7 @@ int main(int argc, char *argv[])
     QObject::connect(&obj_GUIManager, &API_GUIManager::update_UISpline2, &obj_ChartViewerAccel, &API_ChartViewer::receive_DataSpline_3Data);
     QObject::connect(&obj_GUIManager, &API_GUIManager::update_UISpline3, &obj_ChartViewerGyro, &API_ChartViewer::receive_DataSpline_3Data);
     QObject::connect(&obj_GUIManager, &API_GUIManager::update_UIModel3D, &obj_ModelAttitude, &API_ModelAttitude::receive_Attitude);
+    QObject::connect(&obj_GUIManager, &API_GUIManager::update_UIScatter, &obj_Scatter3D, &API_Scatter3D::receive_Data3DPosition);
 
 // binding c++ with qml
     viewer.rootContext()->setContextProperty("obj_MissionHandler",&obj_MissionHandler);
@@ -107,8 +116,8 @@ int main(int argc, char *argv[])
 // final set up
     viewer.setResizeMode(QQuickView::SizeRootObjectToView);
     viewer.setSource(QUrl("qrc:/main.qml"));
-    //viewer.showFullScreen();
-    viewer.showMaximized();
+    viewer.showFullScreen();
+    //viewer.showMaximized();
 
     return app.exec();
 }

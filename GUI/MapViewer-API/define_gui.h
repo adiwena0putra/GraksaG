@@ -17,6 +17,6 @@
 #define GX_LOG_ID 12
 #define GY_LOG_ID 13
 #define GZ_LOG_ID 14
-#define DELAY_TIME 5
+#define DELAY_TIME 100
 
 #endif // DEFINE_GUI_H

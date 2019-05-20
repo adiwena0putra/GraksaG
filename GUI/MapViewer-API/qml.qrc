@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>MapViewer.qml</file>
+        <file>SerialSetting.qml</file>
     </qresource>
 </RCC>

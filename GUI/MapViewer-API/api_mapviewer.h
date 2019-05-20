@@ -13,11 +13,11 @@ public:
     Q_INVOKABLE void set_clear();
 
 signals:
-    void update_UI(double longitude, double latitude, bool isHome);
+    void update_UI(float longitude, float latitude, bool isHome);
     void message_MapViewer(QString message);
 
 public slots:
-    void receive_Data3DPosition(coordinate_t longitude, coordinate_t latitude);
+    void receive_Data3DPosition(float longitude, float latitude);
 
 private:
     bool m_isHome;
